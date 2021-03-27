@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,12 +14,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSubmit;
     private ImageView ivPic;
     private EditText etText;
+    private BottomNavigationView bottomNavigationItemView;
     private File photoFile;
     private String photoFileName = "photo.jpg";
 
@@ -49,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         btnSubmit = findViewById(R.id.btnSubmit);
         etText = findViewById(R.id.etDescription);
         ivPic = findViewById(R.id.ivPic);
+        bottomNavigationItemView = findViewById(R.id.bottomNavigation);
 
 
         btnPic.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 launchCamera();
             }
         });
+
         // queryPosts();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +83,26 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+       bottomNavigationItemView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+           @Override
+           public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+               Fragment fragment;
+               switch(item.getItemId()){
+                   case R.id.action_compose:
+                       fragment = fragment1;
+                       break;
+                   case R.id.action_home:
+                       fragment = fragment2;
+                       break;
+                   case R.id.action_profile:
+                   default:
+                       fragment = fragment3;
+                       break;
+               }
+               return true;
+           }
+       });
     }
 
     private void launchCamera() {
